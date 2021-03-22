@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 
 import './screens/product_detail_screen.dart';
 import './screens/products_overview_screen.dart';
-import './providers/products_providers.dart';
+import 'providers/products.dart';
 
 void main() {
   runApp(MyApp());
@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider(
       //methode de générateur recoit un context construit et retourne une nouvelle instance de la classe
       // les enfants peuvent configurer un ecouteur de cette instance
-      create: (ctx) => ProductsProviders(),
+      create: (_) => new Products(),
       child: MaterialApp(
         title: 'MyShop',
         theme: ThemeData(
