@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:shop_app_flutter/screens/product_detail_screen.dart';
+import 'package:provider/provider.dart';
 
+import './screens/product_detail_screen.dart';
 import './screens/products_overview_screen.dart';
+import './providers/products_providers.dart';
 
 void main() {
   runApp(MyApp());
@@ -10,17 +12,22 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'MyShop',
-      theme: ThemeData(
-        primarySwatch: Colors.purple,
-        accentColor: Colors.deepOrange,
-        fontFamily: 'Lato',
+    // retourne le fournisseur recommander ChangeNotifierProvider
+    return ChangeNotifierProvider(
+      //methode de générateur recoit un context construit et retourne une nouvelle instance de la classe
+      create: (ctx) => ProductsProviders(),
+      child: MaterialApp(
+        title: 'MyShop',
+        theme: ThemeData(
+          primarySwatch: Colors.purple,
+          accentColor: Colors.deepOrange,
+          fontFamily: 'Lato',
+        ),
+        home: ProductsOverviewScreen(),
+        routes: { 
+          ProductDetailScreen.routeName: (ctx) => ProductDetailScreen(),
+        },
       ),
-      home: ProductsOverviewScreen(),
-      routes: {
-        ProductDetailScreen.routName: (ctx) => ProductDetailScreen(),
-      },
     );
   }
 }
