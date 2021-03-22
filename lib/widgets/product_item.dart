@@ -19,7 +19,7 @@ class ProductItem extends StatelessWidget {
         child: GestureDetector( 
           onTap: () {
             Navigator.of(context).pushNamed(
-              ProductDetailScreen.routName,
+              ProductDetailScreen.routeName,
               arguments: id,
             );
           },
