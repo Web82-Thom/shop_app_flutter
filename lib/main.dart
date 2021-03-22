@@ -15,6 +15,7 @@ class MyApp extends StatelessWidget {
     // retourne le fournisseur recommander ChangeNotifierProvider
     return ChangeNotifierProvider(
       //methode de générateur recoit un context construit et retourne une nouvelle instance de la classe
+      // les enfants peuvent configurer un ecouteur de cette instance
       create: (ctx) => ProductsProviders(),
       child: MaterialApp(
         title: 'MyShop',
