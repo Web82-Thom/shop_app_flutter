@@ -69,4 +69,10 @@ class Cart with ChangeNotifier {
     }
     notifyListeners();
   }
+
+  //delete du panier
+  void removeItem(String productId) {
+    _items.remove(productId);
+    notifyListeners();
+  }
 }
