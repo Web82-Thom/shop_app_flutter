@@ -28,6 +28,17 @@ class Cart with ChangeNotifier {
     return _items.length;
   }
 
+  // methode pour le Total
+  double get totalAmount {
+    var total = 0.0;
+    _items.forEach(
+      (key, cartItem) {
+        total += cartItem.price * cartItem.quantity;
+      },
+    );
+    return total;
+  }
+
   //methode add product
   void addItem(
     String productId, 
