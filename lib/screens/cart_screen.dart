@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../providers/cart.dart';
+import '../providers/cart.dart' show Cart;
+import '../widgets/cart_item.dart';
 
 class CartScreen extends StatelessWidget {
   static const routeName = '/cart';
@@ -17,6 +18,7 @@ class CartScreen extends StatelessWidget {
       body: Column(
         children: <Widget>[
           Card(
+            elevation: 5,
             margin: EdgeInsets.all(15),
             child: Padding(
               padding: EdgeInsets.all(8),
@@ -34,10 +36,11 @@ class CartScreen extends StatelessWidget {
                     label: Text(
                       cart.totalAmount.toString() + '€',
                       style: TextStyle(
-                        color: Theme.of(context).primaryTextTheme.headline6.color,
+                        color:
+                            Theme.of(context).primaryTextTheme.headline6.color,
                       ),
                     ),
-                    backgroundColor: Theme.of(context).primaryColor,  
+                    backgroundColor: Theme.of(context).primaryColor,
                   ),
                   TextButton(
                     onPressed: () {},
@@ -49,7 +52,22 @@ class CartScreen extends StatelessWidget {
               ),
             ),
           ),
-        ],),     
+          SizedBox(
+            height: 10,
+          ),
+          //affichage des produits
+          Expanded(
+              child: ListView.builder(
+            itemCount: cart.items.length,
+            itemBuilder: (ctx, i) => CartItem(
+              cart.items.values.toList()[i].id,
+              cart.items.values.toList()[i].price,
+              cart.items.values.toList()[i].quantity,
+              cart.items.values.toList()[i].title,
+            ),
+          ))
+        ],
+      ),
     );
   }
 }
