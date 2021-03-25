@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+// import 'package:shop_app_flutter/providers/product.dart';
 
 class CartItem {
   final String id;
@@ -12,7 +13,6 @@ class CartItem {
     @required this.quantity,
     @required this.price,
   });
-
 }
 
 class Cart with ChangeNotifier {
@@ -20,8 +20,9 @@ class Cart with ChangeNotifier {
   Map<String, CartItem> _items = {};
 
   Map<String, CartItem> get items {
-    return {... _items};
+    return {..._items};
   }
+
   //affichage du nombre d'article dans la panier
   int get itemCount {
     return _items.length;
@@ -40,30 +41,30 @@ class Cart with ChangeNotifier {
 
   //methode add product
   void addItem(
-    String productId, 
-    double price, 
+    String productId,
+    double price,
     String title,
   ) {
     if (_items.containsKey(productId)) {
       // change quantity
       _items.update(
-        productId, 
-        (existingCartItem) => 
-        CartItem(
-          id: existingCartItem.id, 
-          title: existingCartItem.title, 
+        productId,
+        (existingCartItem) => CartItem(
+          id: existingCartItem.id,
+          title: existingCartItem.title,
           price: existingCartItem.price,
-          quantity: existingCartItem.quantity + 1, 
+          quantity: existingCartItem.quantity + 1,
         ),
       );
     } else {
       _items.putIfAbsent(
-        productId, () => CartItem(
-          id: DateTime.now().toString(), 
-          title: title, 
+        productId,
+        () => CartItem(
+          id: DateTime.now().toString(),
+          title: title,
           price: price,
           quantity: 1,
-        ), 
+        ),
       );
     }
     notifyListeners();
@@ -78,6 +79,27 @@ class Cart with ChangeNotifier {
   //Effacer apres la commande
   void clear() {
     _items = {};
-    notifyListeners(); 
+    notifyListeners();
+  }
+
+  //enlever un produits
+  void removeSingleItem(String productId) {
+    if (!_items.containsKey(productId)) {
+      return;
+    }
+    if (_items[productId].quantity > 1) {
+      _items.update(
+        productId,
+        (existingCartItem) => CartItem(
+          id: existingCartItem.id,
+          title: existingCartItem.title,
+          price: existingCartItem.price,
+          quantity: existingCartItem.quantity - 1,
+        ),
+      );
+    } else {
+      _items.remove(productId);
+    }
+    notifyListeners();
   }
 }
