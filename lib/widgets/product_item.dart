@@ -66,11 +66,32 @@ class ProductItem extends StatelessWidget {
               Icons.shopping_cart,
             ),
             onPressed: () {
-             cart.addItem(product.id, product.price, product.title,);
+              cart.addItem(
+                product.id,
+                product.price, 
+                product.title,
+              );
+              ScaffoldMessenger.of(context).hideCurrentSnackBar();
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    'Produit ajouter au panier',
+                    textAlign: TextAlign.center,
+                  ), 
+                  duration: Duration(
+                    seconds: 2,
+                  ),
+                  action: SnackBarAction(
+                    label: 'Annuler',
+                    onPressed: () {
+                      cart.removeSingleItem(product.id);
+                    },
+                  ),
+                ),
+              );
             },
             color: Theme.of(context).accentColor,
           ),
-          
         ),
       ),
     );
