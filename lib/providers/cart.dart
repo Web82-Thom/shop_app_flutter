@@ -1,5 +1,4 @@
 import 'package:flutter/foundation.dart';
-// import '../providers/cart.dart';
 
 class CartItem {
   final String id;
@@ -21,7 +20,7 @@ class Cart with ChangeNotifier {
   Map<String, CartItem> _items = {};
 
   Map<String, CartItem> get items {
-    return {..._items};
+    return {... _items};
   }
   //affichage du nombre d'article dans la panier
   int get itemCount {
