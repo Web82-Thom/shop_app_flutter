@@ -46,11 +46,27 @@ class _EditProductScreenState extends State<EditProductScreen> {
 
   void _updateImageUrl() {
     if (!_imageUrlFocusNode.hasFocus) {
+      if (_imageUrlController.text.isEmpty ||
+          (!_imageUrlController.text.startsWith('http') &&
+            !_imageUrlController.text.startsWith('https')
+          ) ||
+          (!_imageUrlController.text.endsWith('.png') &&
+            !_imageUrlController.text.endsWith('.jpg') &&
+            !_imageUrlController.text.endsWith('.jpeg')
+          )
+      ) {
+        return ;
+      }
+     
       setState(() {});
     }
   }
 
   void _saveForm() {
+    final isValid = _form.currentState.validate();
+    if (!isValid) {
+      return;
+    }
     _form.currentState.save();
     print(_editProduct.title);
     print(_editProduct.description);
@@ -87,6 +103,12 @@ class _EditProductScreenState extends State<EditProductScreen> {
                     _priceFocusNode,
                   );
                 },
+                validator: (value) {
+                  if (value.isEmpty) {
+                    return 'Veuillez remplir le titre';
+                  } 
+                    return null;
+                },
                 onSaved: (value) {
                   _editProduct = Product(
                     title: value,
@@ -107,6 +129,18 @@ class _EditProductScreenState extends State<EditProductScreen> {
                     _descriptionFocusNode,
                   );
                 },
+                validator: (value) {
+                  if (value.isEmpty) {
+                    return 'Veuillez remplir le prix';
+                  } 
+                  if (double.tryParse(value) == null) { 
+                    return 'Entrer un nombre valide';
+                  }
+                  if (double.parse(value) <= 0) {
+                    return 'Entrer un nombre superieur à zéro';
+                  }
+                  return null;
+                },
                 onSaved: (value) {
                   _editProduct = Product(
                     title: _editProduct.title,
@@ -123,6 +157,15 @@ class _EditProductScreenState extends State<EditProductScreen> {
                 maxLines: 3,
                 keyboardType: TextInputType.multiline,
                 focusNode: _descriptionFocusNode,
+                validator: (value) {
+                  if (value.isEmpty) {
+                    return 'Veuillez remplir une description';
+                  } 
+                  if (value.length < 10) {
+                    return 'Votre description doit contenir 10 caracteres minimum';
+                  }
+                    return null;
+                },
                 onSaved: (value) {
                   _editProduct = Product(
                     title: _editProduct.title,
@@ -165,6 +208,18 @@ class _EditProductScreenState extends State<EditProductScreen> {
                       focusNode: _imageUrlFocusNode,
                       onFieldSubmitted: (_) {
                         _saveForm();
+                      },
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return 'Veuillez remplir une image-URL';
+                        } 
+                        if (!value.startsWith('http') && !value.startsWith('https')) {
+                          return "Veuillez remplir une URL valide";
+                        }
+                        if (!value.endsWith('.png') && !value.endsWith('jpg') && !value.endsWith('.jpeg') ){
+                          return "Veuillez remplir une URL-image valide";
+                        }
+                          return null;
                       },
                       onSaved: (value) {
                         _editProduct = Product(
