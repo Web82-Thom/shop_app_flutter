@@ -37,7 +37,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
   };
 
   var _isInit = true;
-  var isLoading = false;
+  var _isLoading = false;
 
   @override
   void initState() {
@@ -94,31 +94,48 @@ class _EditProductScreenState extends State<EditProductScreen> {
     }
   }
 
-  void _saveForm() {
+  Future<void> _saveForm() async {
     final isValid = _form.currentState.validate();
     if (!isValid) {
       return;
     }
     _form.currentState.save();
     setState(() {
-      isLoading = true;
+      _isLoading = true;
     });
     if (_editProduct.id !=null) {
       Provider.of<Products>(context, listen: false).updateProduct(_editProduct.id, _editProduct,);
        setState(() {
-      isLoading = true;
+      _isLoading = false;
     });
        Navigator.of(context).pop();
        
     } else {
-      Provider.of<Products>(context, listen: false).addProduct(_editProduct).then((_){
+      try {
+        await Provider.of<Products>(context, listen: false).addProduct(_editProduct);
+      } catch (onError) {
+        await showDialog(
+          context: context, 
+          builder: (ctx) => AlertDialog(
+            title: Text('Une erreur s\'est produite'),
+            content: Text('Retour page d\'accueil'),
+            actions: <Widget>[
+              TextButton(child: Text('ok'), onPressed: () {
+                print('ok');
+                Navigator.of(ctx).pop();
+              },),
+            ],
+          ),
+        );
+      } finally {
         setState(() {
-      isLoading = true;
-    });
-         Navigator.of(context).pop();
-       });
-       
+            _isLoading = false;
+          });
+        Navigator.of(context).pop();
+      }
       
+          
+          
     }
     //retour de page
     // Navigator.of(context).pop();
@@ -138,8 +155,8 @@ class _EditProductScreenState extends State<EditProductScreen> {
         ],
       ),
       drawer: AppDrawer(),
-      body: isLoading ? 
-        Center(
+      body: _isLoading 
+        ? Center(
           child : CircularProgressIndicator(),
         )
         : Padding(
