@@ -13,6 +13,8 @@ class UserProductsItem extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
+    //pour le snackBar
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
     return ListTile(
       title: Text(title),
       leading: CircleAvatar(
@@ -30,8 +32,25 @@ class UserProductsItem extends StatelessWidget {
             },
             color: Theme.of(context).primaryColor,
             ),
-            IconButton(icon: Icon(Icons.delete), onPressed: () {
-              Provider.of<Products>(context, listen: false).deleteProduct(id);
+            IconButton(icon: Icon(Icons.delete), onPressed: () async {
+              try {
+              await Provider.of<Products>(context, listen: false).deleteProduct(id);
+
+              } catch (onError) {
+                scaffoldMessenger.showSnackBar(
+                  SnackBar(
+                  content : Text('Echec de suppression'),
+                  duration: Duration(
+                    seconds: 8,
+                  ),
+                  action: SnackBarAction(
+                    label: 'ok',
+                    onPressed: () {
+                      
+                    },
+                  ),
+                ));
+              }
             },
             color: Theme.of(context).errorColor,
             )
